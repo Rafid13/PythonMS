@@ -5,12 +5,14 @@ import {Link} from "react-router-dom";
 
 const Products = () => {
     const [products, setProducts] = useState([]);
+    const adminUrl = process.env.REACT_APP_ADMIN_URL + '/api/products';
 
-
+    
     useEffect(() => {
         (
             async () => {
-                const response = await fetch('http://docker.for.win.localhost:8000/api/products');
+                // const response = await fetch('http://docker.for.win.localhost:8000/api/products');
+                const response = await fetch(adminUrl);
 
                 const data = await response.json();
 
@@ -21,7 +23,8 @@ const Products = () => {
 
     const del = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
-            await fetch(`http://docker.for.win.localhost:8000/api/products/${id}`, {
+            // await fetch(`http://docker.for.win.localhost:8000/api/products/${id}`, {
+            await fetch(adminUrl + `/${id}`, {
                 method: 'DELETE'
             });
 

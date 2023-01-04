@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {Product} from "../interfaces/product";
 
+const adminUrl = process.env.REACT_APP_ADMIN_URL + '/api/products';
+
 const Main = () => {
     const [products, setProducts] = useState([] as Product[]);
     useEffect(() => {
         (
             async () => {
-                const response = await fetch('http://docker.for.win.localhost:8001/api/products');
+                // const response = await fetch('http://docker.for.win.localhost:8001/api/products');
+                const response = await fetch(adminUrl);
 
                 const data = await response.json();
 
@@ -16,7 +19,8 @@ const Main = () => {
     }, []);
 
     const like = async (id: number) => {
-        await fetch(`http://docker.for.win.localhost:8001/api/products/${id}/like`, {
+        // await fetch(`http://docker.for.win.localhost:8001/api/products/${id}/like`, {
+        await fetch(adminUrl + `/${id}/like`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
         });

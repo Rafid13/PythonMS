@@ -7,11 +7,13 @@ const ProductsEdit = (props: PropsWithRef<any>) => {
     const [title, setTitle] = useState('');
     const [image, setImage] = useState('');
     const [redirect, setRedirect] = useState(false);
+    const adminUrl = process.env.REACT_APP_ADMIN_URL + '/api/products';
 
     useEffect(() => {
         (
             async () => {
-                const response = await fetch(`http://docker.for.win.localhost:8000/api/products/${props.match.params.id}`);
+                // const response = await fetch(`http://docker.for.win.localhost:8000/api/products/${props.match.params.id}`);
+                const response = await fetch(adminUrl + `/${props.match.params.id}`);
 
                 const product: Product = await response.json();
 
@@ -24,7 +26,8 @@ const ProductsEdit = (props: PropsWithRef<any>) => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await fetch(`http://docker.for.win.localhost:8000/api/products/${props.match.params.id}`, {
+        // await fetch(`http://docker.for.win.localhost:8000/api/products/${props.match.params.id}`, {
+        await fetch(adminUrl + `/${props.match.params.id}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
