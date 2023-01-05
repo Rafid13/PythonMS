@@ -11,11 +11,8 @@ const Products = () => {
     useEffect(() => {
         (
             async () => {
-                // const response = await fetch('http://docker.for.win.localhost:8000/api/products');
                 const response = await fetch(adminUrl);
-
                 const data = await response.json();
-
                 setProducts(data);
             }
         )();
@@ -23,7 +20,6 @@ const Products = () => {
 
     const del = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
-            // await fetch(`http://docker.for.win.localhost:8000/api/products/${id}`, {
             await fetch(adminUrl + `/${id}`, {
                 method: 'DELETE'
             });

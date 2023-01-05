@@ -3,16 +3,18 @@ from flask import Flask, jsonify, abort
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import UniqueConstraint
-import requests
+import requests, os
 
 from producer import publish
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@db/main'
+# app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@db/main'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@main-app-db.default.svc.cluster.local/main' 
 CORS(app)
 
 db = SQLAlchemy(app)
+adminUrl = os.environ['ADMIN_URL'] + '/api/user'
 
 @dataclass
 class Product(db.Model):
@@ -30,6 +32,7 @@ class ProductUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     product_id = db.Column(db.Integer)
+    
 
     UniqueConstraint('user_id', 'product_id', name='user_product_unique')
 
@@ -40,7 +43,8 @@ def index():
 
 @app.route('/api/products/<int:id>/like', methods=['POST'])
 def like(id):
-    req = requests.get('http://docker.for.win.localhost:8000/api/user')
+    # req = requests.get('http://docker.for.win.localhost:8000/api/user')
+    req = requests.get(adminUrl)
     json = req.json()
 
     try:

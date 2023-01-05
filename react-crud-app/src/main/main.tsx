@@ -8,7 +8,6 @@ const Main = () => {
     useEffect(() => {
         (
             async () => {
-                // const response = await fetch('http://docker.for.win.localhost:8001/api/products');
                 const response = await fetch(adminUrl);
 
                 const data = await response.json();
@@ -19,7 +18,6 @@ const Main = () => {
     }, []);
 
     const like = async (id: number) => {
-        // await fetch(`http://docker.for.win.localhost:8001/api/products/${id}/like`, {
         await fetch(adminUrl + `/${id}/like`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}

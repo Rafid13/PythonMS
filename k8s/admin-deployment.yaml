@@ -1,0 +1,164 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-app
+spec:
+  selector:
+    matchLabels:
+      app: admin-app
+  template:
+    metadata:
+      labels:
+        app: admin-app
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: admin-app-backend
+        image: pyms_admin_backend:0.1
+          
+        env:
+        - name: QUEUE_URL
+          value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci  
+        command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+        resources:
+        
+        ports:
+        - containerPort: 8000
+    
+        
+          
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-app-db
+spec:
+  selector:
+    matchLabels:
+      app: admin-app-db
+  template:
+    metadata:
+      labels:
+        app: admin-app-db
+    spec:
+      containers:
+      - name: admin-app-db
+        image: pyms_admin_mysql:0.1
+        env:
+        - name: MYSQL_DATABASE
+          value: admin        
+        - name: MYSQL_PASSWORD
+          value: root  
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        resources:
+
+        ports:
+          - containerPort: 3306
+            protocol: TCP            
+---            
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: admin-sql-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: myjob
+        image: pyms_admin_backend:0.1
+        command: ["sh","-c"]        
+        args: ["python manage.py migrate; python manage.py migrate"]
+        env:
+          - name: QUEUE_URL
+            value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+      restartPolicy: OnFailure
+  backoffLimit: 5
+      
+
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-app-queue
+spec:
+  selector:
+    matchLabels:
+      app: admin-app
+  template:
+    metadata:
+      labels:
+        app: admin-app
+    spec:
+      containers:
+      - name: admin-app-queue
+        image: pyms_admin_queue:0.1      
+        env:
+        - name: ADMIN_URL
+          value: http://admin-app.default.svc.cluster.local:8000
+        - name: QUEUE_URL
+          value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci  
+        command: ["python", "consumer.py"]
+        resources:
+            
+
+
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: react-app
+# spec:
+#   selector:
+#     matchLabels:
+#       app: react-app
+#   template:
+#     metadata:
+#       labels:
+#         app: react-app
+#     spec:
+#       containers:
+#       - name: react-app
+#         image: pyms_reactapp:0.1        
+#         env:
+#         - name: REACT_APP_ADMIN_URL
+#           value: http://react-app:80000
+#         command: ["npm", "start"]
+#         resources:
+#         ports:
+#         - containerPort: 3000
+# ---
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: main-app-backend
+# spec:
+#   selector:
+#     matchLabels:
+#       app: main-app
+#   template:
+#     metadata:
+#       labels:
+#         app: main-app
+#     spec:
+#       containers:
+#       - name: main-app-backend
+#         image: pyms_main_backend:0.1      
+#         env:
+#         - name: ADMIN_URL
+#           value: http://react-app:8000
+#         - name: QUEUE_URL
+#           value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci  
+#         command: ["python", "main.py"]
+#         resources:
+#         ports:
+#         - containerPort: 5000
+
+
+
+# ---
+
+
+            

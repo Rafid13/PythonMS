@@ -1,6 +1,9 @@
 version: '3.8'
 services:
   frontend:
+    environment:
+      REACT_APP_ADMIN_URL: http://localhost:8000
+    image: pyms_reactapp:0.1
     build:
       context: . 
       dockerfile: Dockerfile

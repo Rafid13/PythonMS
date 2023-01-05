@@ -1,11 +1,9 @@
 import pika, json
 
-from main import Product, db
+from main import Product, db, os
 
-
-
-params = pika.URLParameters('amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci')
-
+queueUrl = os.environ['QUEUE_URL']
+params = pika.URLParameters(queueUrl)
 connection = pika.BlockingConnection(params)
 
 channel = connection.channel()

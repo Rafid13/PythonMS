@@ -83,7 +83,8 @@ DATABASES = {
         'NAME': 'admin',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': 'db',
+        # 'HOST': 'db',
+        'HOST': 'admin-app-db.default.svc.cluster.local',
         'PORT': '3306'
     }
 }

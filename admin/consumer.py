@@ -1,12 +1,14 @@
 import pika, json, os, django
 
+queueUrl = os.environ['QUEUE_URL']
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "admin.settings")
 django.setup()
 
 from products.models import Product
 
-params = pika.URLParameters('amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci')
-
+params = pika.URLParameters(queueUrl)
 connection = pika.BlockingConnection(params)
 
 channel = connection.channel()

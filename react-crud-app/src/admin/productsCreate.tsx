@@ -10,8 +10,6 @@ const ProductsCreate = () => {
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
-
-        // await fetch('http://docker.for.win.localhost:8000/api/products', {
         await fetch(adminUrl, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
