@@ -72,7 +72,7 @@ spec:
         - name: ADMIN_URL
           value: http://admin-app.default.svc.cluster.local':8000        
         - name: QUEUE_URL
-          value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci  
+          value: amqps://snwftsci:AeiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
         command: ["python", "main.py"]
         resources:
         
@@ -102,6 +102,6 @@ spec:
         - name: ADMIN_URL
           value: http://admin-app.default.svc.cluster.local:8000
         - name: QUEUE_URL
-          value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci  
+          value: amqps://snwftsci:AeiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci  
         command: ["python", "consumer.py"]
         resources:

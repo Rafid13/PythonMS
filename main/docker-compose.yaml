@@ -8,7 +8,7 @@ services:
     command: 'python main.py'
     environment:
       ADMIN_URL: http://localhost:8000
-      QUEUE_URL: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+      QUEUE_URL: amqps://snwftsci:AeiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
     ports:
       - 8001:5000
     volumes:
@@ -24,7 +24,7 @@ services:
     command: 'python consumer.py'
     environment:
       ADMIN_URL: http://localhost:8000
-      QUEUE_URL: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+      QUEUE_URL: amqps://snwftsci:AeiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
     depends_on:
       - db
 
