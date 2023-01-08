@@ -1,3 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-app
+spec:
+  selector:
+    app: main-app
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30001
+  type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: main-app-db
+spec:  
+  selector:
+    app: main-app-db
+  ports:
+  - port: 3306
+    targetPort: 3306
+    nodePort: 30020
+    protocol: TCP
+  type: NodePort
+  # type: ClusterIP
+
+##################################################################################
+
+## Deployments
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -42,9 +77,11 @@ spec:
         args: ["python manage.py db init; echo INIT DONE && python manage.py db migrate && echo MIGRATE DONE && python manage.py db upgrade && echo UPGRADE DONE"]        
         env:
           - name: ADMIN_URL
-            value: http://admin-app.default.svc.cluster.local':8000
+            value: http://admin-app.default.svc.cluster.local:8000
           - name: QUEUE_URL
-            value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci  
+            value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+          - name: DB_URI
+            value: mysql://root:root@main-app-db.default.svc.cluster.local/main
       restartPolicy: OnFailure
   backoffLimit: 5
 
@@ -70,9 +107,11 @@ spec:
           
         env:
         - name: ADMIN_URL
-          value: http://admin-app.default.svc.cluster.local':8000        
+          value: http://admin-app.default.svc.cluster.local:8000
         - name: QUEUE_URL
-          value: amqps://snwftsci:AeiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+          value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+        - name: DB_URI
+          value: mysql://root:root@main-app-db.default.svc.cluster.local/main
         command: ["python", "main.py"]
         resources:
         
@@ -102,6 +141,8 @@ spec:
         - name: ADMIN_URL
           value: http://admin-app.default.svc.cluster.local:8000
         - name: QUEUE_URL
-          value: amqps://snwftsci:AeiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci  
+          value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+        - name: DB_URI
+          value: mysql://root:root@main-app-db.default.svc.cluster.local/main
         command: ["python", "consumer.py"]
         resources:

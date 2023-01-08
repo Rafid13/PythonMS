@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   backend:
-    image: pyms_admin_backend:0.1
+    image: pyms_admin_backend:0.2
     build:
       context: . 
       dockerfile: Dockerfile
@@ -21,7 +21,7 @@ services:
       context: . 
       dockerfile: Dockerfile
     command: 'python consumer.py'
-    environment:    
+    environment:        
       QUEUE_URL: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
     depends_on:
       - db
@@ -37,8 +37,8 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
-    # volumes:
-    #   - .dbdata:/var/lib/mysql
+    volumes:
+      - .dbdata:/var/lib/mysql
     ports:
       - 33066:3306
 
