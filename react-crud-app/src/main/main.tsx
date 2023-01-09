@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Product} from "../interfaces/product";
 
-const adminUrl = process.env.REACT_APP_ADMIN_URL + '/api/products';
+const mainUrl = process.env.REACT_APP_MAIN_URL + '/api/products';
 
 const Main = () => {
     const [products, setProducts] = useState([] as Product[]);
     useEffect(() => {
         (
             async () => {
-                const response = await fetch(adminUrl);
+                const response = await fetch(mainUrl);
 
                 const data = await response.json();
 
@@ -18,7 +18,7 @@ const Main = () => {
     }, []);
 
     const like = async (id: number) => {
-        await fetch(adminUrl + `/${id}/like`, {
+        await fetch(mainUrl + `/${id}/like`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'}
         });

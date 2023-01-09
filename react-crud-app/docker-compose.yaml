@@ -3,6 +3,7 @@ services:
   frontend:
     environment:
       REACT_APP_ADMIN_URL: http://localhost:8000
+      REACT_APP_MAIN_URL: http://localhost:8001
     image: pyms_reactapp:0.1
     build:
       context: . 

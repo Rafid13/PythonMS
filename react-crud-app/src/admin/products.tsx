@@ -4,8 +4,9 @@ import Wrapper from "./wrapper";
 import {Link} from "react-router-dom";
 
 const Products = () => {
-    const [products, setProducts] = useState([]);
     const adminUrl = process.env.REACT_APP_ADMIN_URL + '/api/products';
+    const [products, setProducts] = useState([]);
+    
 
     
     useEffect(() => {

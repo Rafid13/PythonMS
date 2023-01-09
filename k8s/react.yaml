@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-app
+spec:
+  selector:
+    app: react-app
+  ports:
+  - port: 3000
+    targetPort: 3000
+    nodePort: 30002
+  type: NodePort
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-app
+spec:
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: react-app-backend
+        image: pyms_reactapp:0.1
+          
+        env:
+        - name: REACT_APP_ADMIN_URL
+          value: http://localhost:30000 #http://main-app.default.svc.cluster.local:5000 #http://admin-app.default.svc.cluster.local:8000
+        - name: REACT_APP_MAIN_URL
+          value: http://localhost:30001
+        # - name: QUEUE_URL
+        #   value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+        # - name: DB_URI
+        #   value: mysql://root:root@react-app-db.default.svc.cluster.local/main
+        command: ["npm", "start"]
+        resources:
+        
+        ports:
+        - containerPort: 3000

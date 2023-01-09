@@ -44,3 +44,9 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+{
+"title": "Django",
+ "image": "https://www.emizentech.com/blog/wp-content/uploads/sites/2/2022/07/Python-web-framework-django.jpg"
+}
