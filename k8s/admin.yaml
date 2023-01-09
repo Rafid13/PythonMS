@@ -6,10 +6,9 @@ spec:
   selector:
     app: admin-app
   ports:
-  - port: 8000
-    targetPort: 8000
-    nodePort: 30000
-  type: NodePort
+  - port: 3000
+    targetPort: 8000    
+  type: ClusterIP
 ---
 
 apiVersion: v1
@@ -21,10 +20,8 @@ spec:
     app: admin-app-db
   ports:
   - port: 3306
-    targetPort: 3306
-  #   nodePort: 30010
-  #   protocol: TCP
-  # type: NodePort
+    targetPort: 3306    
+    protocol: TCP  
   type: ClusterIP
   
 
@@ -38,6 +35,7 @@ kind: Deployment
 metadata:
   name: admin-app
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: admin-app
@@ -54,6 +52,8 @@ spec:
         env:
         - name: QUEUE_URL
           value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+        - name: ADMIN_URL
+          value: http://localhost:30000
         command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
         resources:
         
@@ -120,18 +120,18 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: admin-app
+      app: admin-app-queue
   template:
     metadata:
       labels:
-        app: admin-app
+        app: admin-app-queue
     spec:
       containers:
       - name: admin-app-queue
         image: pyms_admin_queue:0.1
         env:
         - name: ADMIN_URL
-          value: http://admin-app.default.svc.cluster.local:8000
+          value: http://localhost:30000
         - name: QUEUE_URL
           value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
         command: ["python", "consumer.py"]

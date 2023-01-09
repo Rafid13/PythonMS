@@ -6,10 +6,11 @@ spec:
   selector:
     app: react-app
   ports:
-  - port: 3000
+  - port: 3002
     targetPort: 3000
-    nodePort: 30002
-  type: NodePort
+  #   nodePort: 30002
+  # type: NodePort
+  type: ClusterIP
 
 ---
 
@@ -34,9 +35,9 @@ spec:
           
         env:
         - name: REACT_APP_ADMIN_URL
-          value: http://localhost:30000 #http://main-app.default.svc.cluster.local:5000 #http://admin-app.default.svc.cluster.local:8000
+          value: http://admin.com #http://main-app.default.svc.cluster.local:5000 #http://admin-app.default.svc.cluster.local:8000
         - name: REACT_APP_MAIN_URL
-          value: http://localhost:30001
+          value: http://main.com
         # - name: QUEUE_URL
         #   value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
         # - name: DB_URI
