@@ -1,3 +1,3 @@
-FROM mysql:5.7.22
+FROM mysql:latest
 # COPY /dbdata/. /var/lib/mysql
 
