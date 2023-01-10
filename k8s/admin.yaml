@@ -59,8 +59,7 @@ spec:
         
         ports:
         - containerPort: 8000
-    
-        
+
           
 ---
 
@@ -91,25 +90,38 @@ spec:
 
         ports:
           - containerPort: 3306
-            protocol: TCP            
----            
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: admin-sql-job
-spec:
-  template:
-    spec:
-      containers:
-      - name: myjob
-        image: pyms_admin_backend:0.2
-        command: ["sh","-c"]        
-        args: ["python manage.py migrate; python manage.py migrate"]
-        env:
-          - name: QUEUE_URL
-            value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
-      restartPolicy: OnFailure
-  backoffLimit: 5
+            protocol: TCP    
+
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: dbdata-volume
+      
+      volumes:
+      - name: dbdata-volume
+        hostPath:          
+          path: /run/desktop/mnt/host/c/data/admin/db/.dbdata      
+          type: Directory
+                
+---      
+
+##### Not needed if working with existing DB files. Needed for setting up new DB #####
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: admin-sql-job
+# spec:
+#   template:
+#     spec:
+#       containers:
+#       - name: myjob
+#         image: pyms_admin_backend:0.2
+#         command: ["sh","-c"]        
+#         args: ["python manage.py migrate; python manage.py migrate"]
+#         env:
+#           - name: QUEUE_URL
+#             value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+#       restartPolicy: OnFailure
+#   backoffLimit: 5
       
 
 --- 

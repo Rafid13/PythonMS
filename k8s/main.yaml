@@ -61,30 +61,42 @@ spec:
         
         resources:
         ports:
-          - containerPort: 3306            
----
+          - containerPort: 3306      
 
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: main-sql-job
-spec:
-  template:
-    spec:
-      containers:
-      - name: myjob
-        image: pyms_main_backend:0.1
-        command: ["sh","-c"]        
-        args: ["python manage.py db init; echo INIT DONE && python manage.py db migrate && echo MIGRATE DONE && python manage.py db upgrade && echo UPGRADE DONE"]        
-        env:
-          - name: ADMIN_URL
-            value: http://admin.com
-          - name: QUEUE_URL
-            value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
-          - name: DB_URI
-            value: mysql://root:root@main-app-db.default.svc.cluster.local/main
-      restartPolicy: OnFailure
-  backoffLimit: 5
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: dbdata-volume
+      
+      volumes:
+      - name: dbdata-volume
+        hostPath:          
+          path: /run/desktop/mnt/host/c/data/main/.dbdata      
+          type: Directory        
+# ---
+
+
+##### Not needed if working with existing DB files. Needed for setting up new DB #####
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: main-sql-job
+# spec:
+#   template:
+#     spec:
+#       containers:
+#       - name: myjob
+#         image: pyms_main_backend:0.1
+#         command: ["sh","-c"]        
+#         args: ["python manage.py db init; echo INIT DONE && python manage.py db migrate && echo MIGRATE DONE && python manage.py db upgrade && echo UPGRADE DONE"]        
+#         env:
+#           - name: ADMIN_URL
+#             value: http://admin.com
+#           - name: QUEUE_URL
+#             value: amqps://snwftsci:eiBfAIXrTH3uyenftpshNJwhGBFIfDya@rattlesnake.rmq.cloudamqp.com/snwftsci
+#           - name: DB_URI
+#             value: mysql://root:root@main-app-db.default.svc.cluster.local/main
+#       restartPolicy: OnFailure
+#   backoffLimit: 5
 
 ---
 
@@ -118,6 +130,8 @@ spec:
         
         ports:
         - containerPort: 8000
+
+    
 
 
 --- 

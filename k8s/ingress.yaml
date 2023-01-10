@@ -13,7 +13,9 @@ spec:
       port:
         number: 3002 
   ingressClassName: nginx
+
   rules:
+
   - host: admin.com
     http:
       paths:
@@ -24,6 +26,7 @@ spec:
             name: admin-app
             port:
               number: 3000
+              
   - host: main.com
     http:
       paths:
@@ -47,67 +50,3 @@ spec:
               number: 3002
 
 
-# ---
-
-# ###### MAIN APP #####
-
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: main-ingress
-#   namespace: default
-#   annotations:
-#     nginx.ingress.kubernetes.io/rewrite-target: /    
-# spec:
-#   defaultBackend:
-#     service:
-#       name: main-app
-#       port:
-#         number: 3001 
-#   ingressClassName: nginx
-#   rules:
-#   - host: main.com
-#     http:
-#       paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: main-app
-#             port:
-#               number: 3001
-  
-  
-
-# ---
-
-# ###### REACT APP #####
-
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: react-ingress
-#   namespace: default
-#   annotations:
-#     nginx.ingress.kubernetes.io/rewrite-target: /    
-# spec:
-#   defaultBackend:
-#     service:
-#       name: react-app
-#       port:
-#         number: 3002 
-#   ingressClassName: nginx
-#   rules:
-#   - host: rcrud.com
-#     http:
-#       paths:
-#       - path: /
-#         pathType: Prefix
-#         backend:
-#           service:
-#             name: react-app
-#             port:
-#               number: 3002
-  
-  
-  
